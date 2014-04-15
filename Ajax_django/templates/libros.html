@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ejemplo Sobre Ajax</title>
+</head>
+<body>
+	<h1>Busqueda de Libros por Autor</h1>
+	<hr>
+	<label>Selecciona el Autor: </label>
+	<select class='op'>
+		<option> -------------- </option>
+		{% for autor in autores%}
+			<option value="{{autor.id}}" > {{autor.nombre}}</option>
+		{% endfor %}
+	</select>
+	<div id  = 'datos'>		
+	</div>
+
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script>
+	$(document).on("ready", inicio);
+	function inicio(){
+		$(".op").on("click",buscar);	
+	}
+	
+	function buscar() {
+		id = $('.op').val();
+		$.ajax({
+		    data:{'id':id},
+	        type:"get",
+		    url:"/ajax_libros/",
+	    success: function(dato){
+	  	html =  "<p><h2>Lista de Libros de este Autor</h2></p>"
+	  	html += "<table border='1'>";
+	  	html += "	<tr>"
+        html += "		<th>Titulo</th>";
+        html += "		<th>Fecha Publicacion</th>";
+        html += "	</tr>";
+       	console.log(dato);
+
+       	for(i=0;i < dato.length;i++){
+       	html += "<tr>";
+       	html += "	<td>"+dato[i].fields['titulo']+"</td>";
+       	html += "	<td>"+dato[i].fields['fecha_publicacion']+"</td>";
+       	html += "</tr>";
+       	}
+
+       	html +="</table>";
+
+	  	$('#datos').html(html);      
+	    },
+	      error:function(){
+	    }
+
+	    });
+	}
+	</script>
+</body>
+</html>
