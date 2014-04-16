@@ -4,7 +4,7 @@ from .models import Autor,Libro
 from django.core import serializers
 
 
-class BusquedaView(ListView):
+class AutoresView(ListView):
 	model = Autor
 	template_name = 'libros.html'
 	context_object_name = 'autores'

@@ -9,7 +9,7 @@
 	<hr>
 	<label>Selecciona el Autor: </label>
 	<select class='op'>
-		<option> -------------- </option>
+		<option value=''> -------------- </option>
 		{% for autor in autores%}
 			<option value="{{autor.id}}" > {{autor.nombre}}</option>
 		{% endfor %}
@@ -19,42 +19,39 @@
 
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script>
-	$(document).on("ready", inicio);
-	function inicio(){
-		$(".op").on("click",buscar);	
-	}
-	
 	function buscar() {
 		id = $('.op').val();
-		$.ajax({
+		if(id){
+			$.ajax({
 		    data:{'id':id},
-	        type:"get",
+	        type:"GET",
 		    url:"/ajax_libros/",
-	    success: function(dato){
-	  	html =  "<p><h2>Lista de Libros de este Autor</h2></p>"
-	  	html += "<table border='1'>";
-	  	html += "	<tr>"
-        html += "		<th>Titulo</th>";
-        html += "		<th>Fecha Publicacion</th>";
-        html += "	</tr>";
-       	console.log(dato);
+		    success: function(dato){
+		  	html =  "<p><h2>Lista de Libros de este Autor</h2></p>"
+		  	html += "<table border='1'>";
+		  	html += "	<tr>"
+	        html += "		<th>Titulo</th>";
+	        html += "		<th>Fecha Publicacion</th>";
+	        html += "	</tr>";
+	       	for(i=0;i < dato.length;i++){
+	       	html += "<tr>";
+	       	html += "	<td>"+dato[i].fields['titulo']+"</td>";
+	       	html += "	<td>"+dato[i].fields['fecha_publicacion']+"</td>";
+	       	html += "</tr>";
+	       	}
 
-       	for(i=0;i < dato.length;i++){
-       	html += "<tr>";
-       	html += "	<td>"+dato[i].fields['titulo']+"</td>";
-       	html += "	<td>"+dato[i].fields['fecha_publicacion']+"</td>";
-       	html += "</tr>";
-       	}
+	       	html +="</table>";
 
-       	html +="</table>";
+		  	$('#datos').html(html);      
+		    },
+		      error:function(){
+		    }
 
-	  	$('#datos').html(html);      
-	    },
-	      error:function(){
-	    }
-
-	    });
+		    });
+		}
 	}
+	$(".op").on("click",buscar);
+		
 	</script>
 </body>
 </html>
